@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lab3.GuestBookEntry;
+import models.AlbumEntry;
 
 @WebServlet("/cookies/AddCommentWithCookies")
 public class AddCommentWithCookies extends HttpServlet {
@@ -86,10 +86,10 @@ public class AddCommentWithCookies extends HttpServlet {
 			// Add new entry to the guest book
 			if (isValidName && isValidMessage) {
 				// get a reference to the array list of guest book entries
-				ArrayList<GuestBookEntry> guestbookEntries = (ArrayList<GuestBookEntry>) getServletContext().getAttribute("guestbookEntries");
+				ArrayList<AlbumEntry> guestbookEntries = (ArrayList<AlbumEntry>) getServletContext().getAttribute("guestbookEntries");
 				
 				// Create a new entry and add it to the guestbook
-				guestbookEntries.add(new GuestBookEntry(name, message));
+				guestbookEntries.add(new AlbumEntry(name, message));
 				
 				// Create a cookie named "name" and store the User's name
 	            Cookie cookie = new Cookie( "name", name );

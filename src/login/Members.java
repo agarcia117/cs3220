@@ -44,9 +44,8 @@ public class Members extends HttpServlet {
 	   	        out.println("<div class=\"container\">");
 	   	        
 	   	        // Page-Specific Content goes here
-	   	        out.println("<h2> Member's Only! </h2>");
-	   	        out.println("<p> Welcome ");
-	   	        out.println(getEmail(request) + "!</p>");
+	   	        out.println("<p> Welcome! </p>");
+	   	        out.println(getEmail(request));
 	   	        out.println("</div>");
 	   	        out.println("</body>");        
 	   	        out.println("</html>");

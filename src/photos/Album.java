@@ -4,19 +4,36 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lab3.GuestBookEntry;
 import photos.AlbumEntry;
 
 @WebServlet("/Album")
 public class Album extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+      
+	
+		public void init(ServletConfig config) throws ServletException {
+			super.init(config);
+			
+			// Created a local, empty array list of type Guest Book Entry
+			ArrayList<AlbumEntry> albumEntries = new ArrayList<AlbumEntry>();
+			
+			// Pre-populate my guest book with some entries
+			albumEntries.add( new AlbumEntry("John Doe", "Hello, World!"));
+			albumEntries.add( new AlbumEntry("Mary Jane", "Hi!"));
+			albumEntries.add( new AlbumEntry("Joe Boxer", "Howdy!"));
+			
+			// Add the array list to the application scope (Servlet Context)
+			getServletContext().setAttribute("albumEntries", albumEntries);
+			
+		}
+	
 	 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		    
 		 	ArrayList<AlbumEntry> albumEntries = (ArrayList<AlbumEntry>) getServletContext().getAttribute("albumEntries");
@@ -39,47 +56,41 @@ public class Album extends HttpServlet {
 	        out.println("<h1>Photo Albums</h1>");
 	        
 	        out.println("<form action=\"Album\" method=\"get\">");
-//			out.println("  <input type=\"text\" name=\"searchQuery\">");
-//			out.println("  <select name=\"searchType\">");
-//			out.println("    <option>ID</option>");
-//			out.println("    <option>Name</option>");
-//			out.println("    <option>Message</option>");
-//			out.println("  </select>");
-//			out.println("  <input type=\"submit\" name=\"searchBtn\" value=\"Search\">");
+
 			out.println("</form>");
 			
-			// Display a table of all guest book entries
-			out.println("<table class=\"table table-bordered table-striped table-hover\">");
-			out.println("  <tr>");
-			out.println("    <th>Name</th>");
-			out.println("    <th>Description</th>");
-			out.println("    <th>Actions</th>");
-			out.println("  </tr>");
-			
-			for( AlbumEntry entry : albumEntries ) {
-				out.println("<tr>");
-				out.println("  <td>" + entry.getAlbumName() + "</td>");
-				out.println("  <td>" + entry.getDescription() + "</td>");
-				out.println("  <td>");
-				out.println("       <a href=\"EditComment?id=" + entry.getId() + "\">View</a>");
-				out.println("       | ");
-				out.println("       <a href=\"DeleteComment?id=" + entry.getId() + "\">Delete Album</a>");
-				out.println("  </td>");
-				out.println("</tr>");
-
+			out.println("<div class=\"card-deck\">");
+			for(AlbumEntry entry : albumEntries ) {
+				out.println("<div class=\"card\">");
+				out.println("<img class=\"card-img-top\" src=\"https://picsum.photos/300\" alt=\"Card image cap\">");
+				out.println("<div class=\"card-body\">");
+				out.println("<h5 class=\"card-title\">" + entry.getAlbumName() + "</h5>");
+				out.println("<p class=\"card-text\">" + entry.getDescription() + "</p>");
+				out.println("<a href=\"#\" class=\"card-link\">View Album</a>");
+				out.println("<a href=\"#\" class=\"card-link\">Delete Album</a>");
+				out.println("</div>");
+				out.println("</div>");
+//				out.println("<img src=\"smiley.gif\" alt=\"Smiley face\">");
+//				out.println("<br>" + entry.getAlbumName() + "<br>");
+//				out.println(entry.getDescription());
 			}
+			out.println("</div>");
+//			if(albumEntries.isEmpty()) {
+//				out.println("<img src=\"smiley.gif\" alt=\"Smiley face\">");
+//			}
 			
-			out.println("</table>");
+			
+			out.println("</div>");
+		    out.println("</body>");        
+		    out.println("</html>");
 	    }
 	 
-	        out.println("</div>");
-	        out.println("</body>");        
-	        out.println("</html>");
+	       
 	        
 	        
-	    }
+	    
 
 	    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    	
-
+	    	doGet(request, response);
+	    }
 }

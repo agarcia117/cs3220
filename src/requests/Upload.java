@@ -12,11 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.RequestContext;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
-@WebServlet("/Upload")
+@WebServlet("/requests/Upload")
 public class Upload extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -53,7 +54,7 @@ public class Upload extends HttpServlet {
         // Parse the request
         try
         {
-            List<FileItem> items = upload.parseRequest( request );
+            List<FileItem> items = upload.parseRequest( (RequestContext) request );
             for( FileItem item : items )
             {
                 // If the item is not a form field - meaning it's an uploaded

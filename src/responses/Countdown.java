@@ -1,4 +1,4 @@
-package requests;
+package responses;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/requests/SimpleAdder")
-public class SimpleAdderServlet extends HttpServlet {
+@WebServlet("/responses/Countdown")
+public class Countdown extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-   
+
+	int count = 5;
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		response.setContentType("text/html");
@@ -24,35 +25,31 @@ public class SimpleAdderServlet extends HttpServlet {
         
         out.println("<head>");
         out.println("    <meta charset=\"UTF-8\">");
-        out.println("    <title>Simple Adder</title>");
+        out.println("    <title>Document</title>");
         out.println("     <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\">");
         out.println("</head>");
         out.println("<body>");
         out.println("<div class=\"container\">");
         
-        out.println("<h1>Simple Adder</h1>");
+        out.println("<h1>Countdown</h1>");
         
-        
-        String strNum1 = request.getParameter("num1");
-        String strNum2 = request.getParameter("num2");
-        
-        try {
-	        int sum = Integer.parseInt( strNum1 ) + Integer.parseInt( strNum2 );
-	        out.println(strNum1 + " + " + strNum2 + " = " + sum);
-        } catch (Exception e) {
-        	response.
-        	sendRedirect("../SimpleAdder.html");
-        	return;
-        	//out.println("<p class=\"text-danger\">Please enter integral values.</p>");
+        if (count > 0) {
+        	out.println("<h3>T-Minus " + count + " second(s) and counting...</h3>");
+        	--count;
+        	//response.setHeader("Refresh", "1");
+        	response.setIntHeader("Refresh", 1);
+        	
+        }
+        else {
+        	out.println("<h3 class=\"text-danger\">Blastoff!</h3>");
+        	count = 5;
         }
         
         out.println("</div>");
         out.println("</body>");        
         out.println("</html>");
-
 	}
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

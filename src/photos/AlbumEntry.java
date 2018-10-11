@@ -6,12 +6,12 @@ public class AlbumEntry {
 	
 	int id;
 	String name;
-	String message;
+	String description;
 	
-	public AlbumEntry(String name, String message) {
+	public AlbumEntry(String name, String description) {
 		super();
 		this.name = name;
-		this.message = message;
+		this.description = description;
 		this.id = count++;
 	}
 
@@ -24,11 +24,11 @@ public class AlbumEntry {
 	}
 
 	public String getDescription() {
-		return message;
+		return description;
 	}
 
-	public void setDescription(String message) {
-		this.message = message;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getId() {
