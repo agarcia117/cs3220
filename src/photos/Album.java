@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import photos.AlbumEntry;
 
-@WebServlet("/Album")
+@WebServlet("/photos/Album")
 public class Album extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
@@ -67,12 +67,9 @@ public class Album extends HttpServlet {
 				out.println("<h5 class=\"card-title\">" + entry.getAlbumName() + "</h5>");
 				out.println("<p class=\"card-text\">" + entry.getDescription() + "</p>");
 				out.println("<a href=\"#\" class=\"card-link\">View Album</a>");
-				out.println("<a href=\"#\" class=\"card-link\">Delete Album</a>");
+				out.println("<a href=\"DeleteAlbum?id=" + entry.getId() + "\" class=\"card-link\">Delete Album</a>");
 				out.println("</div>");
 				out.println("</div>");
-//				out.println("<img src=\"smiley.gif\" alt=\"Smiley face\">");
-//				out.println("<br>" + entry.getAlbumName() + "<br>");
-//				out.println(entry.getDescription());
 			}
 			out.println("</div>");
 //			if(albumEntries.isEmpty()) {
