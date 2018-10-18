@@ -1,9 +1,11 @@
-package requests;
+package photos;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,9 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.jasper.tagplugins.jstl.core.Out;
 
-@WebServlet("/Upload")
-public class Upload extends HttpServlet {
+import photos.PhotoEntry;
+
+@WebServlet("/photos/UploadPhoto")
+public class UploadPhoto extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +30,7 @@ public class Upload extends HttpServlet {
         HttpServletResponse response ) throws ServletException, IOException
     {
         // Redirect the user to the upload form
-        response.sendRedirect( "Upload.html" );
+        response.sendRedirect( "../Upload.html" );
     }
 
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
@@ -51,10 +56,18 @@ public class Upload extends HttpServlet {
         String fileDir = getServletContext().getRealPath( "/WEB-INF/uploads" );
         System.out.println(fileDir);
         // Parse the request
+        int value = -1;
         try
         {
             List<FileItem> items = upload.parseRequest( request );
             
+            for( FileItem item : items ) {
+            	if(item.isFormField()) {
+            		if(item.getFieldName().equals("albumId")) {
+            			value = Integer.parseInt(item.getString());
+            		}
+            	}
+            }
             for( FileItem item : items )
             {
                 // If the item is not a form field - meaning it's an uploaded
@@ -81,6 +94,9 @@ public class Upload extends HttpServlet {
                     
                     // Add the photo to a collection
                     // Get the content type from the item:  item.getContentType()
+                    String contentType = item.getContentType();
+                    ArrayList<PhotoEntry> photoEntries = (ArrayList<PhotoEntry>) getServletContext().getAttribute("photoEntries");
+                    photoEntries.add(new PhotoEntry(value, fileName, fileDir));
                 }
                 else {
                 	String parameterName = item.getFieldName();
@@ -95,12 +111,7 @@ public class Upload extends HttpServlet {
         {
             throw new IOException( e );
         }
-
-        response.setContentType( "text/html" );
-        PrintWriter out = response.getWriter();
-        out.println( "<html><head><title>Upload</title></head><body>" );
-        out.println( "<p>" + count + " file(s) uploaded to " + fileDir );
-        out.println( "</body></html>" );
+        response.sendRedirect( "../photos/albums" );
     }
 
 }

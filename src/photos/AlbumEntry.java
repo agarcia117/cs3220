@@ -5,22 +5,22 @@ public class AlbumEntry {
 	static int count = 0;
 	
 	int id;
-	String name;
+	String albumName;
 	String description;
 	
 	public AlbumEntry(String name, String description) {
 		super();
-		this.name = name;
+		this.albumName = name;
 		this.description = description;
 		this.id = count++;
 	}
 
 	public String getAlbumName() {
-		return name;
+		return albumName;
 	}
 
 	public void setAlbumName(String name) {
-		this.name = name;
+		this.albumName = name;
 	}
 
 	public String getDescription() {

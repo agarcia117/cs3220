@@ -10,19 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.AlbumEntry;
+import models.GuestBookEntry;
 
-@WebServlet("/requests/EditComment")
+@WebServlet("/lab3/EditComment")
 public class EditComment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
-	private AlbumEntry getEntry(int id) {
+	private GuestBookEntry getEntry(int id) {
 		
 		// Get a reference to the guest book
-		ArrayList<AlbumEntry> guestbookEntries = (ArrayList<AlbumEntry>) getServletContext().getAttribute("guestbookEntries");
+		ArrayList<GuestBookEntry> guestbookEntries = (ArrayList<GuestBookEntry>) getServletContext().getAttribute("guestbookEntries");
 		
 		// Find the entry that matches the specified ID
-		for(AlbumEntry entry : guestbookEntries) {
+		for(GuestBookEntry entry : guestbookEntries) {
 			if (entry.getId() == id)
 				return entry;
 		}
@@ -33,7 +33,7 @@ public class EditComment extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		int id = Integer.parseInt(request.getParameter("id"));
-		AlbumEntry entry = getEntry(id);
+		GuestBookEntry entry = getEntry(id);
 		
 		// If we can't find the entry specified, send the user back to the guest book
 		if(entry == null) {
@@ -76,7 +76,7 @@ public class EditComment extends HttpServlet {
 		String message = request.getParameter("message");
 		
 		int id = Integer.parseInt(request.getParameter("id"));
-		AlbumEntry entry = getEntry(id);
+		GuestBookEntry entry = getEntry(id);
 		
 		entry.setName(name);
 		entry.setMessage(message);

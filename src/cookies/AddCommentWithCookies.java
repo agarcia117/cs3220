@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.AlbumEntry;
+import photos.AlbumEntry;
 
 @WebServlet("/cookies/AddCommentWithCookies")
 public class AddCommentWithCookies extends HttpServlet {

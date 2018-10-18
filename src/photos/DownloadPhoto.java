@@ -1,10 +1,12 @@
-package responses;
+package photos;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,13 +15,23 @@ import javax.servlet.http.HttpServletResponse;
 
 //ViewImage?albumId=1&photoId=3
 
-@WebServlet(urlPatterns = {"/responses/Download", "/image.jpg", "/ViewImage"})
-public class Download extends HttpServlet {
+@WebServlet(urlPatterns = {"/photos/DownloadPhoto"})
+public class DownloadPhoto extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    
+    String path = "";
+    
+    public void init(ServletConfig config) throws ServletException {
+		super.init(config);	
+		ArrayList<PhotoEntry> photoEntries = new ArrayList<PhotoEntry>();
+		getServletContext().setAttribute("photoEntries", photoEntries);
+	}
+       
 
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
+    	ArrayList<PhotoEntry> photoEntries = (ArrayList<PhotoEntry>) getServletContext().getAttribute("photoEntries");
     	
     	int photoId = Integer.parseInt(request.getParameter("photoId"));
     	int albumId = Integer.parseInt(request.getParameter("albumId"));
@@ -27,8 +39,12 @@ public class Download extends HttpServlet {
 //    	models.Photo photo = getPhoto(albumId, photoId);
     	
         // Get the path to the file and create a java.io.File object
-        String path = getServletContext()
-        					.getRealPath( "/WEB-INF/uploads/Unknown.jpg"); //" + photo.getFilename() );
+    	for(PhotoEntry entry : photoEntries) {
+        	if(entry.getAlbumId() == albumId && entry.getId() == photoId) {
+        		path = getServletContext()
+    					.getRealPath( "/WEB-INF/uploads/" + entry.getFileName());
+        	}
+    	}
         File file = new File( path );
 
         // Set the response headers. File.length() returns the size of the file
@@ -36,7 +52,7 @@ public class Download extends HttpServlet {
         response.setContentType( "image/jpg" );
         response.setHeader( "Content-Length", "" + file.length() );
         response.setHeader( "Content-Disposition",
-            "inline; filename=Unknown.jpg" );
+            "attachment; filename=" + file.getName() );
 
         // Binary files need to read/written in bytes.
         FileInputStream in = new FileInputStream( file );

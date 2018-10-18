@@ -2,6 +2,7 @@ package photos;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,10 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class AddAlbum
- */
-@WebServlet("/AddAlbum")
+@WebServlet("/photos/AddAlbum")
 public class AddAlbum extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,18 +41,18 @@ public class AddAlbum extends HttpServlet {
 	        
 	        out.println("<h1>Photo Albums</h1>");
 	        out.println("<form action=\"AddAlbum\" method=\"post\">");
-	        out.println(" 	Name: <input type=\"text\" name=\"name\" value=\"" + name + "\"> <br>");
+	        out.println(" 	Album Name: <input type=\"text\" name=\"name\" value=\"" + name + "\"> <br>");
 	        
 	        if (request.getAttribute("nameError") != null)
 	        	out.println("   <p class=\"text-danger\">Please enter a name</p>");
 	        
-	        out.println(" 	Descrpition: <br>");
+	        out.println(" 	Description: <br>");
 	        out.println(" 	<textarea name=\"description\">" + description + "</textarea><br>");
 	        
 	        if (request.getAttribute("messageError") != null)
-	        	out.println("   <p class=\"text-danger\">Please enter a message</p>");
+	        	out.println("   <p class=\"text-danger\">Please enter a description</p>");
 	        
-	        out.println(" 	<input type=\"submit\" name=\"submitBtn\" value=\"Add Comment\">");
+	        out.println(" 	<input type=\"submit\" name=\"submitBtn\" value=\"Add Album\">");
 	        out.println("</form>");
 	        out.println("</div>");
 	        out.println("</body>");        
@@ -64,7 +62,18 @@ public class AddAlbum extends HttpServlet {
 	    }
 
 	    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	        doGet(request, response);
+	    	String name = request.getParameter("name");
+			String description = request.getParameter("description");
+			
+			ArrayList<AlbumEntry> albumEntries = (ArrayList<AlbumEntry>) getServletContext().getAttribute("albumEntries");
+			
+			// Add a new entry
+			albumEntries.add(new AlbumEntry(name, description));
+			
+			// Redirect the User back to the main page
+			response.sendRedirect("albums");
+			
+	    	doGet(request, response);
 	    }
 
 }
